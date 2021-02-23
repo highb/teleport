@@ -25,6 +25,7 @@ import (
 	"github.com/gravitational/teleport/lib/backend"
 	"github.com/gravitational/teleport/lib/backend/lite"
 	"github.com/gravitational/teleport/lib/defaults"
+	"github.com/gravitational/teleport/lib/services"
 	"github.com/gravitational/teleport/lib/utils"
 
 	"github.com/gravitational/trace"
@@ -59,7 +60,7 @@ func (s *PresenceSuite) TestTrustedClusterCRUD(c *check.C) {
 	ctx := context.Background()
 	presenceBackend := NewPresenceService(s.bk)
 
-	tc, err := types.NewTrustedCluster("foo", types.TrustedClusterSpecV2{
+	tc, err := services.NewTrustedCluster("foo", services.TrustedClusterSpecV2{
 		Enabled:              true,
 		Roles:                []string{"bar", "baz"},
 		Token:                "qux",
@@ -69,7 +70,7 @@ func (s *PresenceSuite) TestTrustedClusterCRUD(c *check.C) {
 	c.Assert(err, check.IsNil)
 
 	// we just insert this one for get all
-	stc, err := types.NewTrustedCluster("bar", types.TrustedClusterSpecV2{
+	stc, err := services.NewTrustedCluster("bar", services.TrustedClusterSpecV2{
 		Enabled:              false,
 		Roles:                []string{"baz", "aux"},
 		Token:                "quux",

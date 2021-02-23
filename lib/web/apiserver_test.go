@@ -381,7 +381,7 @@ func (s *WebSuite) createUser(c *C, user string, login string, pass string, otpS
 	teleUser, err := services.NewUser(user)
 	c.Assert(err, IsNil)
 	role := auth.RoleForUser(teleUser)
-	role.SetLogins(types.Allow, []string{login})
+	role.SetLogins(services.Allow, []string{login})
 	options := role.GetOptions()
 	options.ForwardAgent = services.NewBool(true)
 	role.SetOptions(options)
@@ -433,7 +433,7 @@ func (s *WebSuite) TestSAMLSuccess(c *C) {
 		},
 	})
 	c.Assert(err, IsNil)
-	role.SetLogins(types.Allow, []string{s.user})
+	role.SetLogins(services.Allow, []string{s.user})
 	err = s.server.Auth().UpsertRole(ctx, role)
 	c.Assert(err, IsNil)
 
@@ -475,7 +475,7 @@ func (s *WebSuite) TestSAMLSuccess(c *C) {
 	// now swap the request id to the hardcoded one in fixtures
 	authRequest.ID = fixtures.SAMLOktaAuthRequestID
 	authRequest.CSRFToken = csrfToken
-	err = s.server.Auth().Services.Identity.CreateSAMLAuthRequest(*authRequest, backend.Forever)
+	err = s.server.Auth().Identity.CreateSAMLAuthRequest(*authRequest, backend.Forever)
 	c.Assert(err, IsNil)
 
 	// now respond with pre-recorded request to the POST url
@@ -2612,7 +2612,7 @@ func (r *proxy) createUser(ctx context.Context, t *testing.T, user, login, pass,
 	require.NoError(t, err)
 
 	role := auth.RoleForUser(teleUser)
-	role.SetLogins(types.Allow, []string{login})
+	role.SetLogins(services.Allow, []string{login})
 	options := role.GetOptions()
 	options.ForwardAgent = services.NewBool(true)
 	role.SetOptions(options)

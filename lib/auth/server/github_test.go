@@ -27,6 +27,7 @@ import (
 	"github.com/gravitational/teleport/lib/backend"
 	"github.com/gravitational/teleport/lib/backend/lite"
 	"github.com/gravitational/teleport/lib/events"
+	"github.com/gravitational/teleport/lib/services"
 	"github.com/gravitational/teleport/lib/utils"
 
 	"github.com/gravitational/trace"
@@ -57,7 +58,7 @@ func (s *GithubSuite) SetUpSuite(c *check.C) {
 	})
 	c.Assert(err, check.IsNil)
 
-	clusterName, err := types.NewClusterName(types.ClusterNameSpecV2{
+	clusterName, err := services.NewClusterName(services.ClusterNameSpecV2{
 		ClusterName: "me.localhost",
 	})
 	c.Assert(err, check.IsNil)
@@ -78,7 +79,7 @@ func (s *GithubSuite) SetUpSuite(c *check.C) {
 func (s *GithubSuite) TestPopulateClaims(c *check.C) {
 	claims, err := populateGithubClaims(&testGithubAPIClient{})
 	c.Assert(err, check.IsNil)
-	c.Assert(claims, check.DeepEquals, &types.GithubClaims{
+	c.Assert(claims, check.DeepEquals, &services.GithubClaims{
 		Username: "octocat",
 		OrganizationToTeams: map[string][]string{
 			"org1": {"team1", "team2"},

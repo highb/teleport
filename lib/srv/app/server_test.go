@@ -34,7 +34,6 @@ import (
 	"time"
 
 	"github.com/gravitational/teleport"
-	"github.com/gravitational/teleport/api/types"
 	"github.com/gravitational/teleport/lib/auth"
 	"github.com/gravitational/teleport/lib/auth/client"
 	"github.com/gravitational/teleport/lib/auth/server"
@@ -98,7 +97,7 @@ func (s *Suite) SetUpSuite(c *check.C) {
 	c.Assert(err, check.IsNil)
 
 	// Grant the user's role access to the application label "bar: baz".
-	s.role.SetAppLabels(types.Allow, services.Labels{"bar": []string{"baz"}})
+	s.role.SetAppLabels(services.Allow, services.Labels{"bar": []string{"baz"}})
 	err = s.tlsServer.Auth().UpsertRole(context.Background(), s.role)
 	c.Assert(err, check.IsNil)
 
