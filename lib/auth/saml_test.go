@@ -136,13 +136,13 @@ func (s *SAMLSuite) TestEncryptedSAML(c *check.C) {
 	connector.SetSSO("nil")
 	connector.SetAssertionConsumerService("nil")
 
-	signingKeypair := &types.SigningKeyPair{
+	signingKeypair := &types.AsymmetricKeyPair{
 		Cert:       fixtures.SigningCertPEM,
 		PrivateKey: fixtures.SigningKeyPEM,
 	}
 	connector.SetSigningKeyPair(signingKeypair)
 
-	encryptionKeypair := &types.EncryptionKeyPair{
+	encryptionKeypair := &types.AsymmetricKeyPair{
 		Cert:       fixtures.EncryptionCertPEM,
 		PrivateKey: fixtures.EncryptionKeyPEM,
 	}

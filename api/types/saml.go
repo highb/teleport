@@ -50,9 +50,9 @@ type SAMLConnector interface {
 	// GetIssuer returns issuer
 	GetIssuer() string
 	// GetSigningKeyPair returns signing key pair
-	GetSigningKeyPair() *SigningKeyPair
+	GetSigningKeyPair() *AsymmetricKeyPair
 	// GetSigningKeyPair sets signing key pair
-	SetSigningKeyPair(k *SigningKeyPair)
+	SetSigningKeyPair(k *AsymmetricKeyPair)
 	// Equals returns true if the connectors are identical
 	Equals(other SAMLConnector) bool
 	// GetSSO returns SSO service
@@ -88,9 +88,9 @@ type SAMLConnector interface {
 	// SetProvider sets the identity provider.
 	SetProvider(string)
 	// GetEncryptionKeyPair returns the key pair for SAML assertions.
-	GetEncryptionKeyPair() *EncryptionKeyPair
+	GetEncryptionKeyPair() *AsymmetricKeyPair
 	// SetEncryptionKeyPair sets the key pair for SAML assertions.
-	SetEncryptionKeyPair(k *EncryptionKeyPair)
+	SetEncryptionKeyPair(k *AsymmetricKeyPair)
 }
 
 // NewSAMLConnector returns a new SAMLConnector based off a name and SAMLConnectorSpecV2.
@@ -374,22 +374,22 @@ func (o *SAMLConnectorV2) GetTraitMappings() TraitMappingSet {
 }
 
 // GetSigningKeyPair returns signing key pair
-func (o *SAMLConnectorV2) GetSigningKeyPair() *SigningKeyPair {
+func (o *SAMLConnectorV2) GetSigningKeyPair() *AsymmetricKeyPair {
 	return o.Spec.SigningKeyPair
 }
 
 // SetSigningKeyPair sets signing key pair
-func (o *SAMLConnectorV2) SetSigningKeyPair(k *SigningKeyPair) {
+func (o *SAMLConnectorV2) SetSigningKeyPair(k *AsymmetricKeyPair) {
 	o.Spec.SigningKeyPair = k
 }
 
 // GetEncryptionKeyPair returns the key pair for SAML assertions.
-func (o *SAMLConnectorV2) GetEncryptionKeyPair() *EncryptionKeyPair {
+func (o *SAMLConnectorV2) GetEncryptionKeyPair() *AsymmetricKeyPair {
 	return o.Spec.EncryptionKeyPair
 }
 
 // SetEncryptionKeyPair sets the key pair for SAML assertions.
-func (o *SAMLConnectorV2) SetEncryptionKeyPair(k *EncryptionKeyPair) {
+func (o *SAMLConnectorV2) SetEncryptionKeyPair(k *AsymmetricKeyPair) {
 	o.Spec.EncryptionKeyPair = k
 }
 
@@ -450,11 +450,11 @@ type SAMLConnectorSpecV2 struct {
 	// AttriburesToRoles is a list of mappings of attribute statements to roles
 	AttributesToRoles []AttributeMapping `json:"attributes_to_roles"`
 	// SigningKeyPair is x509 key pair used to sign AuthnRequest
-	SigningKeyPair *SigningKeyPair `json:"signing_key_pair,omitempty"`
+	SigningKeyPair *AsymmetricKeyPair `json:"signing_key_pair,omitempty"`
 	// Provider is the external identity provider.
 	Provider string `json:"provider,omitempty"`
 	// EncryptionKeyPair is a key pair used for decryption of SAML assertions.
-	EncryptionKeyPair *EncryptionKeyPair `json:"assertion_key_pair,omitempty"`
+	EncryptionKeyPair *AsymmetricKeyPair `json:"assertion_key_pair,omitempty"`
 }
 
 // AttributeMapping is SAML Attribute statement mapping
@@ -468,18 +468,11 @@ type AttributeMapping struct {
 	Roles []string `json:"roles,omitempty"`
 }
 
-// SigningKeyPair is a key pair used to sign SAML AuthnRequest
-type SigningKeyPair struct {
+// AsymmetricKeyPair is a combination of a public certificate and private key that
+// can be used for encryption and signing.
+type AsymmetricKeyPair struct {
 	// PrivateKey is PEM encoded x509 private key
 	PrivateKey string `json:"private_key"`
-	// Cert is certificate in OpenSSH authorized keys format
-	Cert string `json:"cert"`
-}
-
-// EncryptionKeyPair is a key pair used for decryption SAML assertions.
-type EncryptionKeyPair struct {
-	// PrivateKey is PEM encoded x509 private key
-	PrivateKey string `json:"private_key"`
-	// Cert is certificate in OpenSSH authorized keys format
+	// Cert is a PEM-encoded x509 certificate.
 	Cert string `json:"cert"`
 }

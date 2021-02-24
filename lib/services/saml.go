@@ -89,7 +89,7 @@ func ValidateSAMLConnector(sc SAMLConnector) error {
 		if err != nil {
 			return trace.Wrap(err)
 		}
-		sc.SetSigningKeyPair(&SigningKeyPair{
+		sc.SetSigningKeyPair(&AsymmetricKeyPair{
 			PrivateKey: string(keyPEM),
 			Cert:       string(certPEM),
 		})
